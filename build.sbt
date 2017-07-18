@@ -19,19 +19,21 @@ name := "Scala SBT Template"
 
 version := "0.1.0"
 
-scalaVersion := "2.10.3"
+scalaVersion := "2.11.8"
 
-organization := "com.mycode"
+organization := "com.test"
 
 libraryDependencies ++= {
-  	Seq(
-  	    "org.specs2" %% "specs2" % "2.3.4" % "test",
-  	    "org.scalatest" % "scalatest_2.10" % "2.0" % "test"
-  	)
+  val orientDBVersion = "2.2.22"
+  Seq(
+	"com.orientechnologies" % "orientdb-core" % orientDBVersion,
+	"com.orientechnologies" % "orientdb-client" % orientDBVersion,
+	"com.orientechnologies" % "orientdb-graphdb" % orientDBVersion
+    )
 }
 
 // if you have more than one main method, you can specify which is used when typing 'run' in sbt
-mainClass := Some("com.mycode.App")
+mainClass := Some("com.test.Test")
 
 resolvers ++= Seq("snapshots"     at "http://oss.sonatype.org/content/repositories/snapshots",
                 "releases"        at "http://oss.sonatype.org/content/repositories/releases"
