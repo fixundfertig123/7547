@@ -5,9 +5,11 @@ import scala.collection.immutable.HashMap
 import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
+import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal
 
 object Test {
 
+  ODatabaseRecordThreadLocal.INSTANCE
 //  val graphFactory: OrientGraphFactory = new OrientGraphFactory("memory:test").setupPool(1, 5)
   val graphFactory: OrientGraphFactory = new OrientGraphFactory("remote:localhost/test", "test", "test1234")
 
