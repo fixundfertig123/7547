@@ -40,7 +40,7 @@ object Test {
     try {
       val v1 = graph.addVertex(OrientBaseGraph.CLASS_PREFIX + "CV1".asInstanceOf[Object], HashMap("testID" -> 1, 1 -> "b", 2 -> "a", 3 -> "c").asJava)
       //      graph.getRawGraph.getMetadata.getSequenceLibrary.getSequence("seqFriendCounter").getDocument.reload()
-      val v2 = graph.addVertex(OrientBaseGraph.CLASS_PREFIX + "CV2".asInstanceOf[Object], HashMap("testID" -> 1, 1 -> "b", 2 -> "a", 3 -> "c").asJava)
+      val v2 = graph.addVertex(OrientBaseGraph.CLASS_PREFIX + "CV2".asInstanceOf[Object], HashMap("testID" -> 2, 1 -> "b", 2 -> "a", 3 -> "c").asJava)
       println(v1.getProperties.toString() + " / " + v2.getProperties.toString())
       println("Ended!")
     } catch {
