@@ -15,7 +15,7 @@ class Test extends Suites(new Test2) {}
 
 class Test2 extends FlatSpec {
 
-  //  ODatabaseRecordThreadLocal.INSTANCE
+  ODatabaseRecordThreadLocal.INSTANCE
   val graphFactory: OrientGraphFactory = new OrientGraphFactory("memory:test").setupPool(1, 5)
   //  val graphFactory: OrientGraphFactory = new OrientGraphFactory("remote:localhost/test", "test", "test1234")
 
