@@ -72,7 +72,7 @@ class Test2 extends FlatSpec {
     }
   }  
 
-  "A duplicate vertex creation" should "be possible" in {
+  "A different vertex creation" should "be possible" in {
     val graph = graphFactory.getTx
     try {
 //      graph.getRawGraph.reload
