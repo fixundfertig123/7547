@@ -1,9 +1,0 @@
-exit
-run
-clean
-compile
-run
-eclipse with-source=true
-git status
-ls
-exit

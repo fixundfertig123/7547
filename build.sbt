@@ -24,11 +24,13 @@ scalaVersion := "2.11.8"
 organization := "com.test"
 
 libraryDependencies ++= {
-  val orientDBVersion = "2.2.22"
+  val orientDBVersion = "2.2.24"
   Seq(
 	"com.orientechnologies" % "orientdb-core" % orientDBVersion,
 	"com.orientechnologies" % "orientdb-client" % orientDBVersion,
-	"com.orientechnologies" % "orientdb-graphdb" % orientDBVersion
+	"com.orientechnologies" % "orientdb-graphdb" % orientDBVersion,
+	"org.scalactic" %% "scalactic" % "3.0.1",
+	"org.scalatest" %% "scalatest" % "3.0.1" % "test"	
     )
 }
 
