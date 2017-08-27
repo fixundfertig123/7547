@@ -23,6 +23,8 @@ scalaVersion := "2.11.8"
 
 organization := "com.test"
 
+fork in (Test,run) := false
+
 libraryDependencies ++= {
   val orientDBVersion = "2.2.26"
   Seq(
