@@ -23,8 +23,10 @@ scalaVersion := "2.11.8"
 
 organization := "com.test"
 
+fork in (Test,run) := false
+
 libraryDependencies ++= {
-  val orientDBVersion = "2.2.24"
+  val orientDBVersion = "2.2.26"
   Seq(
 	"com.orientechnologies" % "orientdb-core" % orientDBVersion,
 	"com.orientechnologies" % "orientdb-client" % orientDBVersion,
@@ -37,8 +39,8 @@ libraryDependencies ++= {
 // if you have more than one main method, you can specify which is used when typing 'run' in sbt
 mainClass := Some("com.test.Test")
 
-resolvers ++= Seq("snapshots"     at "http://oss.sonatype.org/content/repositories/snapshots",
-                "releases"        at "http://oss.sonatype.org/content/repositories/releases"
+resolvers ++= Seq("snapshots"     at "https://oss.sonatype.org/content/repositories/snapshots",
+                "releases"        at "https://oss.sonatype.org/content/repositories/releases"
                 )
  
 scalacOptions ++= Seq("-unchecked", "-deprecation")

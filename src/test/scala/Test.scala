@@ -1,25 +1,49 @@
-import com.orientechnologies.orient.core.sql.OCommandSQL
-import com.tinkerpop.blueprints.impls.orient.OrientBaseGraph
-import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory
+import scala.collection.JavaConverters.mapAsJavaMapConverter
 import scala.collection.immutable.HashMap
-import scala.collection.JavaConversions._
-import scala.collection.JavaConverters._
-import com.tinkerpop.blueprints.impls.orient.OrientGraph
-import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal
-import com.tinkerpop.blueprints.impls.orient.OrientVertex
+
+import org.scalatest.BeforeAndAfterAll
+import org.scalatest.BeforeAndAfterEach
 import org.scalatest.FlatSpec
 import org.scalatest.Suites
+
+import com.orientechnologies.orient.core.db.ODatabaseRecordThreadLocal
+import com.orientechnologies.orient.core.sql.OCommandSQL
 import com.orientechnologies.orient.core.storage.ORecordDuplicatedException
+import com.tinkerpop.blueprints.impls.orient.OrientBaseGraph
+import com.tinkerpop.blueprints.impls.orient.OrientGraphFactory
+import com.tinkerpop.blueprints.impls.orient.OrientVertex
 
-class Test extends Suites(new Test2) {}
+class Test extends Suites(Test2) {}
 
-class Test2 extends FlatSpec {
+object Test2 extends FlatSpec with BeforeAndAfterAll with BeforeAndAfterEach {
 
   ODatabaseRecordThreadLocal.INSTANCE
-  val graphFactory: OrientGraphFactory = new OrientGraphFactory("memory:test").setupPool(1, 5)
-  //  val graphFactory: OrientGraphFactory = new OrientGraphFactory("remote:localhost/test", "test", "test1234")
 
-  //  def main(args: Array[String]): Unit = {
+  val graphFactory: OrientGraphFactory = new OrientGraphFactory("memory:test").setupPool(1, 5)
+  //  val graphFactory: OrientGraphFactory = new OrientGraphFactory("remote:localhost/test", "test", "test1234")  
+
+  var graph: OrientBaseGraph = null
+
+  override def beforeEach() {
+    graph = graphFactory.getTx
+    graph.getRawGraph.reload
+    super.beforeEach() // To be stackable, must call super.beforeEach
+  }
+
+  override def afterEach() {
+    super.afterEach() // To be stackable, must call super.afterEach
+    if (!graph.isClosed()) {
+      graph.shutdown()
+    }
+  }
+
+  override def afterAll() {
+    super.afterAll() // To be stackable, must call super.afterEach
+    if (!graph.isClosed()) {
+      graphFactory.close()
+    }
+  }
+
   println("Start!")
 
   graphFactory.getNoTx.command(new OCommandSQL("DROP CLASS CV1")).execute();
@@ -41,13 +65,11 @@ class Test2 extends FlatSpec {
   graphFactory.getNoTx.command(new OCommandSQL("CREATE CLASS CV2 extends SV")).execute();
   graphFactory.getNoTx.command(new OCommandSQL("CREATE INDEX uniqueID ON SV (uniqueID) UNIQUE")).execute();
   graphFactory.getNoTx.command(new OCommandSQL("CREATE INDEX testid ON SV (testID) UNIQUE")).execute();
-  graphFactory.getDatabase.commit(true)
 
   var v1: OrientVertex = null
   var v2: OrientVertex = null
 
   "A vertex creation" should "be possible" in {
-    val graph = graphFactory.getTx
     try {
       v1 = graph.addVertex(OrientBaseGraph.CLASS_PREFIX + "CV1".asInstanceOf[Object], HashMap("testID" -> 1, 1 -> "b", 2 -> "a", 3 -> "c").asJava)
       v1.detach()
@@ -59,9 +81,8 @@ class Test2 extends FlatSpec {
       graph.shutdown();
     }
   }
-  
+
   it should "throw an Exception if duplicate id is entered, causing an index error on commit" in {
-    val graph = graphFactory.getTx
     try {
       intercept[ORecordDuplicatedException] {
         graph.addVertex(OrientBaseGraph.CLASS_PREFIX + "CV1".asInstanceOf[Object], HashMap("testID" -> 1, 1 -> "b", 2 -> "a", 3 -> "c").asJava)
@@ -70,12 +91,10 @@ class Test2 extends FlatSpec {
     } finally {
       graph.shutdown
     }
-  }  
+  }
 
   "A different vertex creation" should "be possible" in {
-    val graph = graphFactory.getTx
     try {
-//      graph.getRawGraph.reload
       v1.attach(graph).reload()
       val v2 = graph.addVertex(OrientBaseGraph.CLASS_PREFIX + "CV2".asInstanceOf[Object], HashMap("testID" -> 2, 1 -> "b", 2 -> "a", 3 -> "c").asJava)
       println(v1.getProperties.toString() + " / " + v2.getProperties.toString())
@@ -88,5 +107,6 @@ class Test2 extends FlatSpec {
       println("Finished!")
     }
   }
-  //  }
+
+  graphFactory.close()
 }
